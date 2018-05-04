@@ -2,31 +2,29 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-tickets"></i> 基础表格</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-tickets"></i> 订单管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button type="primary" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
-                <el-select v-model="select_cate" placeholder="筛选省份" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                <el-select v-model="select_cate" placeholder="订单状态" class="handle-select mr10">
+                    <el-option key="1" label="已完成" value="已完成订单"></el-option>
+                    <el-option key="2" label="已核销" value="已核销订单"></el-option>
+                    <el-option key="3" label="待支付" value="待支付订单"></el-option>
                 </el-select>
                 <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
             </div>
             <el-table :data="data" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
-                <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column prop="date" label="日期" sortable width="150">
+                <el-table-column prop="date" label="日期" sortable width="150"></el-table-column>
+                <el-table-column prop="name" label="姓名" width="120"></el-table-column>
+                <el-table-column prop="phone" label="手机号" width="120"></el-table-column>
+                <el-table-column prop="buildingName" label="房源名称" width="120"></el-table-column>
+                <el-table-column prop="address" label="详细地址" :formatter="formatter">
                 </el-table-column>
-                <el-table-column prop="name" label="姓名" width="120">
-                </el-table-column>
-                <el-table-column prop="address" label="地址" :formatter="formatter">
-                </el-table-column>
-                <el-table-column label="操作" width="180">
+                <el-table-column label="订单操作" width="180">
                     <template slot-scope="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">核销</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -142,13 +140,6 @@
             },
             handleEdit(index, row) {
                 this.idx = index;
-                const item = this.tableData[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                }
-                this.editVisible = true;
             },
             handleDelete(index, row) {
                 this.idx = index;

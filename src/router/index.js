@@ -4,10 +4,11 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            redirect: '/table'
         },
         {
             path: '/',
@@ -22,23 +23,23 @@ export default new Router({
                 {
                     path: '/table',
                     component: resolve => require(['../components/page/BaseTable.vue'], resolve),
-                    meta: { title: '基础表格' }
+                    meta: { title: '订单管理' }
                 },
                 {
                     path: '/tabs',
                     component: resolve => require(['../components/page/Tabs.vue'], resolve),
-                    meta: { title: 'tab选项卡' }
+                    meta: { title: '消息列表' }
                 },
                 {
                     path: '/form',
                     component: resolve => require(['../components/page/BaseForm.vue'], resolve),
-                    meta: { title: '基本表单' }
+                    meta: { title: '发布房源' }
                 },
                 {
                     // 富文本编辑器组件
                     path: '/editor',
                     component: resolve => require(['../components/page/VueEditor.vue'], resolve),
-                    meta: { title: '富文本编辑器' }
+                    meta: { title: '房源列表' }
                 },
                 {
                     // markdown组件

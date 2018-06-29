@@ -36,6 +36,11 @@ export default new Router({
                     meta: { title: '发布房源' }
                 },
                 {
+                    path: '/banner',
+                    component: resolve => require(['../components/page/banner.vue'], resolve),
+                    meta: { title: 'banner管理' }
+                },
+                {
                     // 富文本编辑器组件
                     path: '/editor',
                     component: resolve => require(['../components/page/VueEditor.vue'], resolve),

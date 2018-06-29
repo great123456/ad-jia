@@ -36,9 +36,9 @@
                         title: '订单管理'
                     },
                     {
-                        icon: 'el-icon-message',
-                        index: 'tabs',
-                        title: '消息列表'
+                        icon: 'el-icon-upload',
+                        index: 'banner',
+                        title: 'banner管理'
                     },
                     {
                         icon: 'el-icon-date',

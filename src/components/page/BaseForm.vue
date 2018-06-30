@@ -56,7 +56,7 @@
                     <el-form-item label="房源描述">
                         <el-input type="textarea" rows="5" v-model="form.desc"></el-input>
                     </el-form-item>
-                     <el-form-item label="房源主图">
+                    <el-form-item label="房源主图">
                         <el-upload
                           class="upload-demo"
                           action="https://jsonplaceholder.typicode.com/posts/"
@@ -68,6 +68,21 @@
                           :on-exceed="handleExceed"
                           :file-list="fileList">
                           <el-button size="small" type="primary">点击上传</el-button>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item label="详情图片">
+                        <el-upload
+                          class="upload-demo"
+                          action="https://jsonplaceholder.typicode.com/posts/"
+                          :on-preview="handlePreview"
+                          :on-remove="handleRemove"
+                          :before-remove="beforeRemove"
+                          multiple
+                          :limit="10"
+                          :on-exceed="handleExceed"
+                          :file-list="fileList">
+                          <el-button size="small" type="primary">点击上传</el-button>
+                          <div slot="tip" class="el-upload__tip">可以上传多张</div>
                         </el-upload>
                     </el-form-item>
                     <el-form-item>

@@ -13,74 +13,78 @@
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
                     <el-form-item label="联系电话">
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="form.phone"></el-input>
                     </el-form-item>
                     <el-form-item label="房源简介">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="管理员">
-                        <el-input v-model="form.name" style="width:216px;"></el-input>
+                        <el-input v-model="form.introduction"></el-input>
                     </el-form-item>
                     <el-form-item label="价格">
-                        <el-input v-model="form.name" style="width:216px;"></el-input>
+                        <el-input v-model="form.price" style="width:216px;"></el-input>
                     </el-form-item>
                     <el-form-item label="房源面积">
-                        <el-input v-model="form.name" style="width:216px;"></el-input>
+                        <el-input v-model="form.area" style="width:216px;"></el-input>
                     </el-form-item>
                     <el-form-item label="宜住人数">
-                        <el-input v-model="form.name" style="width:100px;"></el-input>
+                        <el-input v-model="form.amount" style="width:100px;"></el-input>
                         <span style="margin-left:3px;">人</span>
                     </el-form-item>
                     <el-form-item label="房型选择">
-                        <el-select v-model="form.region" placeholder="请选择房型">
-                            <el-option key="bbk" label="一室一厅一卫" value="bbk"></el-option>
-                            <el-option key="xtc" label="二室一厅一卫" value="xtc"></el-option>
-                            <el-option key="imoo" label="三室二厅一卫" value="imoo"></el-option>
+                        <el-select v-model="form.house_type1" placeholder="请选择" style="width:160px;">
+                            <el-option v-for="item in typeList1" :key="item" :label="item" :value="item"></el-option>
+                        </el-select>
+                        <el-select v-model="form.house_type2" placeholder="请选择" style="width:160px;">
+                            <el-option v-for="item in typeList2" :key="item" :label="item" :value="item"></el-option>
+                        </el-select>
+                        <el-select v-model="form.house_type3" placeholder="请选择" style="width:160px;">
+                            <el-option v-for="item in typeList3" :key="item" :label="item" :value="item"></el-option>
                         </el-select>
                     </el-form-item>
                      <el-form-item label="区域选择">
-                        <el-cascader :options="options" v-model="form.options"></el-cascader>
+                        <el-cascader :options="options" v-model="form.region"></el-cascader>
                     </el-form-item>
                     <el-form-item label="详细地址">
-                        <el-input type="textarea" v-model="form.textarea" rows="2"></el-input>
+                        <el-input type="textarea" v-model="form.address" rows="2"></el-input>
                     </el-form-item>
                     <el-form-item label="入住须知">
-                        <el-input type="textarea" v-model="form.textarea" rows="2"></el-input>
+                        <el-input type="textarea" v-model="form.occupancy_note" rows="2"></el-input>
                     </el-form-item>
                     <el-form-item label="客人须知">
-                        <el-input type="textarea" v-model="form.textarea" rows="2"></el-input>
+                        <el-input type="textarea" v-model="form.guest_note" rows="2"></el-input>
                     </el-form-item>
                     <el-form-item label="退订政策">
-                        <el-input type="textarea" v-model="form.textarea" rows="2"></el-input>
+                        <el-input type="textarea" v-model="form.policy" rows="2"></el-input>
                     </el-form-item>
                     <el-form-item label="房源描述">
-                        <el-input type="textarea" rows="5" v-model="form.desc"></el-input>
+                        <el-input type="textarea" rows="5" v-model="form.description"></el-input>
                     </el-form-item>
-                    <el-form-item label="房源主图">
+                    <el-form-item label="房源主图" style="margin-bottom:60px;">
                         <el-upload
                           class="upload-demo"
-                          action="https://jsonplaceholder.typicode.com/posts/"
-                          :on-preview="handlePreview"
-                          :on-remove="handleRemove"
-                          :before-remove="beforeRemove"
+                          action="/api/admin/upload/img"
+                          :on-remove="handleRemoveMain"
+                          :on-change="handleChangeMain"
                           multiple
+                          name="img"
+                          :headers="Authorization"
                           :limit="1"
-                          :on-exceed="handleExceed"
+                          list-type="picture"
                           :file-list="fileList">
                           <el-button size="small" type="primary">点击上传</el-button>
+                          <div slot="tip" class="el-upload__tip">上传1张</div>
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="详情图片">
                         <el-upload
                           class="upload-demo"
-                          action="https://jsonplaceholder.typicode.com/posts/"
-                          :on-preview="handlePreview"
+                          action="/api/admin/upload/img"
                           :on-remove="handleRemove"
-                          :before-remove="beforeRemove"
+                          :on-change="handleChange"
                           multiple
+                          name="img"
+                          :headers="Authorization"
                           :limit="10"
-                          :on-exceed="handleExceed"
-                          :file-list="fileList">
+                          list-type="picture"
+                          :file-list="fileList2">
                           <el-button size="small" type="primary">点击上传</el-button>
                           <div slot="tip" class="el-upload__tip">可以上传多张</div>
                         </el-upload>
@@ -100,53 +104,42 @@
         data: function(){
             return {
                 fileList: [],
-                handleRemove(file, fileList) {
-                    console.log(file, fileList);
-                },
-                handlePreview(file) {
-                    console.log(file);
-                },
-                handleExceed(files, fileList) {
-                    this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-                },
-                beforeRemove(file, fileList) {
-                    return this.$confirm(`确定移除 ${ file.name }？`);
-                },
+                fileList2: [],
                 options:[
                     {
-                        value: 'guangdong',
+                        value: '广东省',
                         label: '广东省',
                         children: [
                             {
-                                value: 'guangzhou',
+                                value: '广州市',
                                 label: '广州市',
                                 children: [
                                     {
-                                        value: 'tianhe',
+                                        value: '天河区',
                                         label: '天河区'
                                     },
                                     {
-                                        value: 'haizhu',
+                                        value: '海珠区',
                                         label: '海珠区'
                                     },
                                     {
-                                        value: 'panyu',
+                                        value: '番禺区',
                                         label: '番禺区'
                                     },
                                     {
-                                        value: 'yuexiu',
+                                        value: '越秀区',
                                         label: '越秀区'
                                     },
                                     {
-                                        value: 'liwan',
+                                        value: '荔湾区',
                                         label: '荔湾区'
                                     },
                                     {
-                                        value: 'huangpu',
+                                        value: '黄埔区',
                                         label: '黄埔区'
                                     },
                                     {
-                                        value: 'foshan',
+                                        value: '佛山',
                                         label: '佛山'
                                     }
                                 ]
@@ -154,19 +147,105 @@
                         ]
                     }
                 ],
+                typeList1:['一室','二室','三室','四室','五室','六室'],
+                typeList2:['一厅','二厅','三厅','四厅','五厅','六厅'],
+                typeList3:['一卫','二卫','三卫'],
                 form: {
                     name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    desc: '',
-                    options: []
+                    phone: '',
+                    introduction: '',
+                    price: '',
+                    area: '',
+                    amount: '',
+                    house_type: '',
+                    house_type2: '',
+                    house_type3: '',
+                    region: [],
+                    address: '',
+                    occupancy_note: '',
+                    guest_note: '',
+                    policy: '',
+                    description: '',
+                    mian_pic: '',
+                    detail_pic: ''
                 }
             }
         },
+        computed: {
+          Authorization(){
+            return {
+              Authorization:  `bearer ${localStorage.getItem('admin-token')}`
+            }
+          }
+        },
         methods: {
+            handleRemoveMain(file, fileList) {
+                console.log('fileList',fileList)
+                this.fileList = fileList
+            },
+            handleChangeMain(file, fileList){
+              console.log('fileList1',fileList)
+              this.fileList = fileList
+            },
+            handlePreviewMain(file) {
+                console.log(file)
+            },
+            handleRemove(file, fileList) {
+              this.fileList2 = fileList
+            },
+            handleChange(file, fileList){
+              console.log('fileList2',fileList)
+              this.fileList2 = fileList
+            },
+            handlePreview(file) {
+                console.log(file)
+            },
             onSubmit() {
-                this.$message.success('提交成功！');
+                if(this.fileList.length == 0){
+                    this.$message('请上传一张房源主图再提交')
+                    return
+                }
+                if(this.fileList2.length == 0){
+                    this.$message('请上传至少一张房源详情图片再提交')
+                    return
+                }
+                let mian_pic = this.fileList[0].response.data.url
+                let detail_pic = this.fileList2.map(function(item){
+                    return item.response.data.url
+                })
+                detail_pic = detail_pic[0]
+                this.$axios({
+                  method: 'post',
+                  url: `/api/admin/house/store`,
+                  headers: {
+                    Authorization: `bearer ${localStorage.getItem('admin-token')}`
+                  },
+                  data: {
+                    name: this.form.name,
+                    phone: this.form.phone,
+                    introduction: this.form.introduction,
+                    price: this.form.price,
+                    area: this.form.area,
+                    amount: this.form.amount,
+                    house_type: this.form.house_type+this.form.house_type2+this.form.house_type3,
+                    region: this.form.region.join(''),
+                    address: this.form.address,
+                    occupancy_note: this.form.occupancy_note,
+                    guest_note: this.form.guest_note,
+                    policy: this.form.policy,
+                    description: this.form.description,
+                    detail_pic: detail_pic,
+                    mian_pic: mian_pic,
+                    sort: 1
+                  }
+                })
+                .then((res) => {
+                  if(res.data.code == 200){
+                    this.$message.success('发布房源成功')
+                  }else{
+                    this.$message.error('发布失败')
+                  }
+                })
             }
         }
     }

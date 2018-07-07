@@ -11,12 +11,12 @@
               <el-button type="primary" plain @click="addSchool">添加banner</el-button>
             </div>
             <el-table :data="tableData" border style="width: 100%" ref="multipleTable">
-                <el-table-column prop="created_at" label="创建日期"></el-table-column>
                 <el-table-column label="banner">
                   <template slot-scope="props">
                     <img :src="props.row.img" alt="" style="width:100px;height:auto;">
                   </template>
                 </el-table-column>
+                <el-table-column prop="link" label="链接"></el-table-column>
                  <el-table-column label="操作">
                    <template slot-scope="scope">
                       <el-button
@@ -76,10 +76,6 @@
                     atar: '',
                     link: '',
                     position: '',
-                    hospital: '',
-                    department: '',
-                    good_at: '',
-                    introduction: '',
                     content: '123'
                 },
                 imageUrl: '',
@@ -112,7 +108,7 @@
                  return
                }
                var files = document.getElementById("file").files[0]
-               var url = '/api/admin/upload/upload-image'
+               var url = '/api/admin/upload/img'
                var xhr = new XMLHttpRequest()
                var formData = new FormData()
                formData.append('img',files)
@@ -145,7 +141,7 @@
               console.log('sllsglhgl');
               this.$axios({
                 method: 'get',
-                url: `/api/admin/banner/list/10?page=1`,
+                url: `/api/admin/banner/list/20?page=1`,
                 headers: {
                   Authorization: `bearer ${localStorage.getItem('admin-token')}`
                 }
@@ -157,11 +153,20 @@
             },
             addSchool(){
               this.fileName = ''
+              this.form.link = ''
               this.addVisible = true
             },
             // 保存编辑
             saveEdit() {
               const self = this
+              if(this.form.link == ''){
+                this.$message.error('链接不能为空')
+                return
+              }
+              if(this.form.atar == ''){
+                this.$message.error('请先上传一张图片')
+                return
+              }
               this.$axios({
                 method: 'post',
                 url: `/api/admin/banner/store`,
@@ -170,9 +175,7 @@
                 },
                 data: {
                   img: self.form.atar,
-                  content: '123',
-                  type: 1,
-                  link:'https://health.hxgtech.com',
+                  link: self.form.link,
                   sort: 1
                 }
               })
@@ -188,7 +191,18 @@
             },
             handleDelete(row){
                this.deleteId = row.id
-               this.delVisible = true
+               this.$confirm('此操作将删除当前banner, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                      }).then(() => {
+                        this.deleteRow()
+                      }).catch(() => {
+                        this.$message({
+                          type: 'info',
+                          message: '已取消删除'
+                        });          
+                      })
             },
             // 确定删除
             deleteRow(){

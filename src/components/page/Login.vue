@@ -23,7 +23,7 @@
         data: function(){
             return {
                 ruleForm: {
-                    username: 'admin',
+                    username: 'jiadums0618@qq.com',
                     password: '123123'
                 },
                 rules: {
@@ -38,10 +38,28 @@
         },
         methods: {
             submitForm(formName) {
+                const self = this
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
+                        if(self.ruleForm.username == 'jiadums0618@qq.com' && self.ruleForm.password == '123123'){
+                          self.$axios.post('/api/admin/user/login', {
+                              email: 'jiadums0618@qq.com',
+                              password: '123123'
+                            })
+                            .then(function (res) {
+                              console.log('res',res)
+                              if(res.data.code == 200){
+                                self.$message.success('登录成功')
+                                localStorage.setItem('admin-token',res.data.data.token)
+                                localStorage.setItem('ms_username',self.ruleForm.username);
+                                self.$router.push('/table');
+                              }else{
+                                self.$message.error('登录失败')
+                              }
+                            })
+                        }else{
+                            self.$message.error('登录失败')
+                        }
                     } else {
                         console.log('error submit!!');
                         return false;

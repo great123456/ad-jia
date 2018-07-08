@@ -11,8 +11,20 @@
                 <el-table-column prop="name" label="房源名称" width="160"></el-table-column>
                 <el-table-column prop="phone" label="联系电话" width="160"></el-table-column>
                 <el-table-column prop="price" label="价格" width="160"></el-table-column>
+                <el-table-column prop="house_type" label="房型" width="130"></el-table-column>
+                <el-table-column label="房源主图">
+                  <template slot-scope="props">
+                    <img :src="props.row.mian_pic" alt="" style="width:100px;height:auto;">
+                  </template>
+                </el-table-column>
                 <el-table-column prop="region" label="区域" width="120"></el-table-column>
-                <el-table-column prop="address" label="房源地址">
+                <el-table-column prop="address" label="房源地址"></el-table-column>
+                <el-table-column prop="introduction" label="房源简介"></el-table-column>
+                <el-table-column label="房源描述" type="expand">
+                  <template slot-scope="props">
+                    <span>房源描述:</span>
+                    <p>{{props.row.description}}</p>
+                  </template>
                 </el-table-column>
                 <el-table-column label="操作" width="180">
                     <template slot-scope="scope">

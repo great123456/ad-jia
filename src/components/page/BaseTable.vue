@@ -16,21 +16,26 @@
                 <el-button type="primary" icon="search" @click="search">搜索</el-button>
             </div> -->
             <el-table :data="tableData" border style="width: 100%" ref="multipleTable">
-                <el-table-column prop="date" label="日期" sortable width="150"></el-table-column>
-                <el-table-column prop="order" label="订单编号" width="160"></el-table-column>
+                <el-table-column prop="paid_at" label="付款时间" sortable width="150"></el-table-column>
+                <el-table-column prop="order_no" label="订单编号" width="160"></el-table-column>
                 <el-table-column prop="name" label="姓名" width="120"></el-table-column>
-                <el-table-column prop="phone" label="手机号" width="120"></el-table-column>
-                <el-table-column prop="buildingName" label="房源名称" width="120"></el-table-column>
+                <el-table-column prop="phone" label="手机号" width="130"></el-table-column>
+                <el-table-column prop="total" label="订单总价"></el-table-column>
+                <el-table-column prop="price" label="客房单价"></el-table-column>
+                <el-table-column prop="begin" label="预定日期"></el-table-column>
+                <el-table-column prop="end" label="退房日期"></el-table-column>
+                <el-table-column prop="is_paid" label="是否付款"></el-table-column>
+                <el-table-column prop="buildingName" label="房源名称"></el-table-column>
                 <el-table-column prop="address" label="房源地址">
                 </el-table-column>
-                <el-table-column label="订单操作" width="180">
+               <!--  <el-table-column label="订单操作" width="180">
                     <template slot-scope="scope">
                         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">核销</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div class="pagination" v-show="total>0">
-                <el-pagination @current-change="handleCurrentChange" :page-size="10" layout="prev, pager, next" :total="total">
+                <el-pagination background @current-change="handleCurrentChange" :page-size="10" layout="prev, pager, next" :total="total">
                 </el-pagination>
             </div>
         </div>
@@ -113,6 +118,9 @@
                 .then((res) => {
                     console.log('res',res.data)
                     self.tableData = res.data.data.list
+                    self.tableData.forEach(function(item){
+                        item.is_paid = item.is_paid == 1?'已付款':'未付款'
+                    })
                     self.total = res.data.data.total
                     console.log('total',self.total);
                 })

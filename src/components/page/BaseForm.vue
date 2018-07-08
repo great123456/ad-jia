@@ -213,7 +213,6 @@
                 let detail_pic = this.fileList2.map(function(item){
                     return item.response.data.url
                 })
-                detail_pic = detail_pic[0]
                 this.$axios({
                   method: 'post',
                   url: `/api/admin/house/store`,
@@ -234,7 +233,7 @@
                     guest_note: this.form.guest_note,
                     policy: this.form.policy,
                     description: this.form.description,
-                    detail_pic: detail_pic,
+                    detail_pic: detail_pic.join(','),
                     mian_pic: mian_pic,
                     sort: 1
                   }

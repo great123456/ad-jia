@@ -4,10 +4,10 @@
         <div class="ms-login">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
                 <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username"></el-input>
+                    <el-input v-model="ruleForm.username" placeholder="用户名"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+                    <el-input type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
@@ -23,8 +23,8 @@
         data: function(){
             return {
                 ruleForm: {
-                    username: 'jiadums0618@qq.com',
-                    password: '123123'
+                    username: '',
+                    password: ''
                 },
                 rules: {
                     username: [
@@ -54,11 +54,11 @@
                                 localStorage.setItem('ms_username',self.ruleForm.username);
                                 self.$router.push('/table');
                               }else{
-                                self.$message.error('登录失败')
+                                self.$message.error('用户名或者密码错误')
                               }
                             })
                         }else{
-                            self.$message.error('登录失败')
+                            self.$message.error('用户名或者密码错误')
                         }
                     } else {
                         console.log('error submit!!');
